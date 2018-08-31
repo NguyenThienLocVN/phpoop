@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        body{text-align: center;}
+        #input-url{
+            width: 300px;
+            height: 25px;
+        }
+        #button{
+            border: none;
+            padding: 7px;
+            border-radius: 5px;
+            background-color: lightcoral;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <form action="curl.php" method="GET">
+        <input type="text" name="input-url" id="input-url">
+        <input type="submit" value="Click" name="button" id="button">
+    </form>
+    <?php
+        if(isset($_GET['input-url']))
+        { ?>
+        <table style="border:1px solid; width:500px; text-align:center; margin:auto;">
+            <tr>
+                <th>Categories</th>
+                <th>Content</th>
+            </tr>
+            <tr>
+                <td>Title</td>
+                <td><?php echo $result['Title']; ?></td>
+            </tr>
+            <tr>
+                <td>Content</td>
+                <td><?php echo $result['Content']; ?></td>
+            </tr>
+        </table>
+    <?php } ?>
+</body>
+</html>
