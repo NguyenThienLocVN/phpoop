@@ -32,9 +32,30 @@ class Crawler {
 			curl_close($process);
 		return $return;
 	}
+}
 
+class VnexpressCrawler extends Crawler
+{
 	public function fetchData(){
-		$html = $this->getData($_GET['input-url']);
+		$html = parent::getData($_GET['input-url']);
+
+		$result = array();
+		if(preg_match('#<title>(.*?)</title>#', $html, $match))
+		{
+			$result['Title'] = $match[1];
+		}
+		if(preg_match('#<p class="Normal">(.*?)</p>#', $html, $match))
+		{
+			$result['Content'] = $match[1];
+		}
+		return $result;
+	}
+}
+
+class VietnamnetCrawler extends Crawler
+{
+	public function fetchData(){
+		$html = parent::getData($_GET['input-url']);
 
 		$result = array();
 		if(preg_match('#<title>(.*?)</title>#', $html, $match))
@@ -46,22 +67,14 @@ class Crawler {
 			$result['Content'] = $match[1];
 		}
 		return $result;
-		print_r($_GET['input-url']);
 	}
 }
 
-class VnexpressCrawler extends Crawler
-{
-	
-}
+$vnec = new VnexpressCrawler();
+$title = $vnec->fetchData();
 
-class VietnamnetCrawler extends Crawler
-{
-
-}
-
-$vnec = new Crawler();
-$item = $vnec->fetchData();
+$vnnc = new VietnamnetCrawler();
+$title = $vnnc->fetchData();
 ?>
 
 
@@ -76,10 +89,10 @@ $item = $vnec->fetchData();
     </tr>
     <tr>
         <td>Title</td>
-        <td><?php print_r($item['Title']); ?></td>
+        <td><?php print_r($title['Title']); ?></td>
     </tr>
     <tr>
         <td>Content</td>
-        <td><?php print_r($item['Content']); ?></td>
+        <td><?php print_r($title['Content']); ?></td>
     </tr>
 </table>
