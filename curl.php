@@ -44,7 +44,7 @@ class VnexpressCrawler extends Crawler
 		{
 			$result['Title'] = $match[1];
 		}
-		if(preg_match('#<p class="Normal">(.*?)</p>#', $html, $match))
+		if(preg_match('#<span>(.*?)</span>#', $html, $match))
 		{
 			$result['Content'] = $match[1];
 		}
@@ -70,11 +70,24 @@ class VietnamnetCrawler extends Crawler
 	}
 }
 
-$vnec = new VnexpressCrawler();
-$title = $vnec->fetchData();
+$url = $_GET['input-url'];
+$parse = parse_url($url);
+$domain = $parse['host'];
+// echo $domain;
 
-$vnnc = new VietnamnetCrawler();
-$title = $vnnc->fetchData();
+if($domain == 'vnexpress.net')
+{
+	$vnec = new VnexpressCrawler();
+	$title = $vnec->fetchData();
+}
+
+if($domain == 'vietnamnet.vn')
+{
+	$vnnc = new VietnamnetCrawler();
+	$title = $vnnc->fetchData();
+}
+
+
 ?>
 
 
