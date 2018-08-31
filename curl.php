@@ -86,8 +86,6 @@ if(isset($_GET['input-url']))
 	{
 		$result['Content'] = $match[1];
 	}
-
-	header('location:curl.php');
 }
 
 
@@ -95,4 +93,18 @@ if(isset($_GET['input-url']))
 // print_r($result);
 
 ?>
-
+<a href="index.html">Back</a>
+<table style="border:1px solid; width:500px; text-align:center; margin:auto;">
+    <tr>
+        <th>Categories</th>
+        <th>Content</th>
+    </tr>
+    <tr>
+        <td>Title</td>
+        <td><?php echo $result['Title']; ?></td>
+    </tr>
+    <tr>
+        <td>Content</td>
+        <td><?php echo $result['Content']; ?></td>
+    </tr>
+</table>
