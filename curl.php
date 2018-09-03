@@ -1,6 +1,11 @@
 
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <?php 
+mysqli_query("SET character_set_results=utf8");
 include('config/db.php');
+
+
+// Class to crawl the information
 class Crawler {
 	public $headers; 
 	public $userAgent; 
@@ -19,7 +24,7 @@ class Crawler {
 
 
 	// Function get data from url
-	public function getData($url) {
+	public function setData($url) {
 		$process = curl_init($url);
 		curl_setopt($process, CURLOPT_HTTPHEADER, $this->headers);
 		curl_setopt($process, CURLOPT_HEADER, 0);
@@ -34,10 +39,53 @@ class Crawler {
 	}
 }
 
+// Class to handling database
+class Database
+{
+	private $conn;
+	private $host = "localhost";
+	private $username = "root";
+	private $password = "123456";
+	private $database = "crawl";
+
+	public function __construct() {
+		$this->conn = new mysqli($this->host, $this->username, 
+			$this->password, $this->database);
+	
+		if(!$this->conn) {
+			echo "Failed to connecto to : " . mysql_connect_error($this->conn);
+		}
+	}
+
+	public function insertDatabase($tableName, $data)
+	{	
+		$string = "insert into ".$tableName." (";
+		$string .= implode(",", array_keys($data)) . ') VALUES (';            
+		$string .= "'" . implode("','", array_values($data)) . "')";  
+		
+		if(mysqli_query($this->conn, $string))  
+		{  
+			 return true;  
+		}  
+		else  
+		{  
+			 echo mysqli_error($this->conn);  
+		}
+
+	}
+
+	public function __destruct()
+	{
+		$conn->close();
+	}
+}
+
+
+// Custom class to crawl
 class VnexpressCrawler extends Crawler
 {
-	public function fetchData(){
-		$html = parent::getData($_GET['input-url']);
+	public function getData(){
+		$html = parent::setData($_GET['input-url']);
 
 		$result = array();
 		if(preg_match('#<title>(.*?)</title>#', $html, $match))
@@ -51,11 +99,11 @@ class VnexpressCrawler extends Crawler
 		return $result;
 	}
 }
-
+// Custom class to crawl
 class VietnamnetCrawler extends Crawler
 {
-	public function fetchData(){
-		$html = parent::getData($_GET['input-url']);
+	public function getData(){
+		$html = parent::setData($_GET['input-url']);
 
 		$result = array();
 		if(preg_match('#<title>(.*?)</title>#', $html, $match))
@@ -70,22 +118,35 @@ class VietnamnetCrawler extends Crawler
 	}
 }
 
+// Get domain name from input url
 $url = $_GET['input-url'];
 $parse = parse_url($url);
 $domain = $parse['host'];
-// echo $domain;
+
 
 if($domain == 'vnexpress.net')
 {
 	$vnec = new VnexpressCrawler();
-	$title = $vnec->fetchData();
+	$item = $vnec->getData();
 }
 
 if($domain == 'vietnamnet.vn')
 {
 	$vnnc = new VietnamnetCrawler();
-	$title = $vnnc->fetchData();
+	$item = $vnnc->getData();
 }
+
+
+// Add data to database
+$db = new Database();
+$insertArray = array(
+	"domain" => $domain,
+	"title" => $item['Title'],
+	"content" => $item['Content']
+);
+
+$db->insertDatabase("data", $insertArray);
+// mysql_query("SET NAMES 'utf8'");
 
 
 ?>
@@ -102,10 +163,10 @@ if($domain == 'vietnamnet.vn')
     </tr>
     <tr>
         <td>Title</td>
-        <td><?php print_r($title['Title']); ?></td>
+        <td><?php print_r($item['Title']); ?></td>
     </tr>
     <tr>
         <td>Content</td>
-        <td><?php print_r($title['Content']); ?></td>
+        <td><?php print_r($item['Content']); ?></td>
     </tr>
 </table>
