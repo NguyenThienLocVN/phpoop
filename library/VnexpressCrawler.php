@@ -5,7 +5,16 @@ include('Crawler.php');
 class VnexpressCrawler extends Crawler
 {
 	public function outputData(){
-		$html = parent::inputURL($_GET['input-url']);
+		$headers = $_SERVER['REQUEST_URI']; //all link after 'localhost' : /phpoop/public/curl.php?input-url=https%3A%2F%2Fvnexpress.net
+		$parse = parse_url($headers); //remove file path (php/public/curl.php)
+		$last =  urldecode($parse['query']); //decode into url link
+		$link = substr($last, 10, -14).'<br>'; //cut string to url, ex: https://vnexpress.net/tin-tuc/thoi-su/...
+
+		// Get domain name from input url
+		$split = parse_url($link);
+		$domain = $split['host'];
+		
+		$html = parent::inputURL($link);
 
 		$result = array();
 		if(preg_match('#<title>(.*?)</title>#', $html, $match))

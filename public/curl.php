@@ -1,15 +1,9 @@
-
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <?php
 include('../library/Database.php');
 include('../library/Crawler.php');
 include('../library/VnexpressCrawler.php');
 include('../library/VietnamnetCrawler.php');
 
-// Get domain name from input url
-$url = $_GET['input-url'];
-$parse = parse_url($url);
-$domain = $parse['host'];
 
 
 if($domain == 'vnexpress.net')
