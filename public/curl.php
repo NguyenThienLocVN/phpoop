@@ -1,11 +1,10 @@
 
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <?php
-include('library/Database.php');
-include('library/Crawler.php');
-include('library/VnexpressCrawler.php');
-include('library/VietnamnetCrawler.php');
-
+include('../library/Database.php');
+include('../library/Crawler.php');
+include('../library/VnexpressCrawler.php');
+include('../library/VietnamnetCrawler.php');
 
 // Get domain name from input url
 $url = $_GET['input-url'];
@@ -41,7 +40,7 @@ $db->insertDatabase("data", $insertArray);
 
 
 <!-- After get data, we fetch data into table -->
-<a href="index.html">Back</a>
+<a href="../index.html">Back</a>
 <table style="border:1px solid; width:500px; text-align:center; margin:auto;">
     <tr>
         <th>Categories</th>

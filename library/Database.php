@@ -1,11 +1,12 @@
 <?php
+include('../config/config.php');
 class Database
 {
 	private $conn;
 
 	public function __construct() {
-		$this->conn = new mysqli("localhost", "root", "123456", "crawl");
-	
+		$this->conn = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+		
 		if(!$this->conn) {
 			echo "Failed to connect to : " . mysql_connect_error($this->conn);
 		}
