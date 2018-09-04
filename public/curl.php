@@ -1,7 +1,7 @@
 
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <?php
-include('config/db.php');
+include('library/Database.php');
 include('library/Crawler.php');
 include('library/VnexpressCrawler.php');
 include('library/VietnamnetCrawler.php');
